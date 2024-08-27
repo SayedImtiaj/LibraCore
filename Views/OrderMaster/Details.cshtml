@@ -1,0 +1,92 @@
+﻿@model MyAspMvc.Models.OrderMaster
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#orderInfo").click(function () {
+            $.ajax({
+                url: "@Url.Action("OrderDetails", "OrderMaster", new {id = @Model.OrderMasterId})",
+                type: "get",
+                dataType: "json",
+                success: function (result) {
+                    console.log("HEllo")
+                    console.log(result)
+                    $("#orderDisplay table tbody").empty;
+                    for (var i = 0; i < result.length; i++) {
+                        $("#orderDisplay table tbody").append("<tr><td>" + result[i].bookName + "</td><td>" + result[i].quantity + "</td><td>" + result[i].unitPrice + "</td><td>" + result[i].totalPrice + "</td></tr>");
+                    }
+                    $("#orderDisplay").show();
+                }
+            });
+            this.disabled = true;
+        });
+    });
+</script>
+
+<h2>Details</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <h4>OrderMaster</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.OrderDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Note)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Note)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Image)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Image)
+                </dd>
+
+            </dl>
+
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.OrderMasterId }) |
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <button class="btn btn-info" id="orderInfo" data-order-id="@Model.OrderMasterId">Course Enroll Details</button>
+            </div>
+            <br />
+            <div id="orderDisplay" style="display:none">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
